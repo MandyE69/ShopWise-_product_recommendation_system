@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ShopWise Recommender System</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <style>
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: #d4f6ff;
+      }
+
+      .navbar {
+        box-shadow: 0px 10px 10px rgba(39, 37, 37, 0.426);
+        background-color: #ffffffa5;
+      }
+
+      .navbar-nav .nav-link:hover {
+        color: rgb(4, 0, 255) !important;
+      }
+
+      .container {
+        margin-top: 50px;
+      }
+
+      .nav-link.btn {
+        border-radius: 5px;
+      }
+    
+        .modal-content {
+            background-color: #fff; /* Set modal content background color */
+            color: #000; /* Set modal content text color */
+        }
+        .modal-content.dark {
+            background-color: #000; /* Set modal content background color for dark theme */
+            color: #ffffff; /* Set modal content text color for dark theme */
+        }
+
+      .card {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
+        min-height: 380px;
+        margin-bottom: 30px;
+        cursor: pointer;
+      }
+
+      .card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0px 15px 25px rgba(0, 0, 0, 0.2);
+        border: 2px solid rgb(38, 115, 214);
+      }
+
+      .card-img-top {
+        border-radius: 12px;
+        height: 220px;
+        object-fit: contain;
+        width: 100%;
+        border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+      }
+
+      .card-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+        padding: 15px;
+      }
+
+      .card-title {
+        font-size: 1.2rem;
+        color: #333;
+        text-align: center;
+      }
+
+      .card-text {
+        color: #777;
+        text-align: center;
+      }
+
+      .btn-primary {
+        background-color: rgb(38, 115, 214);
+        border: none;
+        border-radius: 24px;
+        padding: 12px 24px;
+        font-size: 14px;
+        transition: transform 0.3s ease;
+      }
+
+      .btn-primary:hover {
+        background-color: rgb(28, 85, 162);
+        transform: scale(1.05);
+      }
+
+      .btn-border {
+        background: transparent;
+        border: 2px solid rgb(38, 115, 214);
+        color: rgb(38, 115, 214);
+        border-radius: 24px;
+        padding: 8px 16px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+      }
+
+      .btn-border:hover {
+        background-color: rgb(38, 115, 214);
+        color: white;
+        border-color: white;
+      }
+
+      #exploreButton {
+        background-color: #ffffff;
+        color: #1976d2;
+        font-weight: bold;
+        border-radius: 30px;
+        padding: 12px 35px;
+        font-size: 16px;
+        transition: background-color 0.3s, color 0.3s, transform 0.3s;
+      }
+
+      #exploreButton:hover {
+        background-color: #1976d2;
+        color: #ffffff;
+        transform: scale(1.05); /* Slightly enlarge the button on hover */
+      }
+
+      /* Header section customization */
+
+      header p {
+        color: #ece93a; /* Change the color of the <p> */
+        font-size: 18px;
+      }
+       h1{
+        font-weight: bolder;
+      }
+
+      /* Footer styling */
+    </style>
+  </head>
+
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <div class="container-fluid">
+        <a
+          class="navbar-brand"
+          href="#"
+          style="color: rgba(65, 79, 241, 0.905); font-weight: bolder; font-size: x-large; padding-left: 15px;">ShopWise</a
+        >
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div
+          class="collapse navbar-collapse justify-content-end"
+          id="navbarNav"
+        >
+          <ul class="navbar-nav">
+            <li class="nav-item active">
+              <a
+                class="nav-link"
+                href="#"
+                style="color: rgba(65, 79, 241, 0.905)"
+              >
+                <i class="fas fa-home"></i> Home
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="#"
+                id="settingsLink"
+                style="color: rgba(65, 79, 241, 0.905)"
+              >
+                <i class="fas fa-cog"></i> Settings
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="/main"
+                id="settingsLink"
+                style="color: rgba(65, 79, 241, 0.905)"
+                >Recommendation</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Header Section -->
+    <header
+      class="bg-primary text-white text-center py-5"
+      style="background: linear-gradient(135deg, #a3abb5de, #1976d2)"
+    >
+      <div class="container">
+        <h1 class="display-4  mb-4" style="font-weight: bolder;">Welcome to ShopWise</h1>
+        <h2 class="lead mb-4 "style="font-weight: 500;">
+          Your personalized product recommendation system.
+        </h2>
+        <p>Discover the best products sugesstions to your needs.</p>
+        <div class="text-center mt-4">
+          <a href="main" class="btn btn-light btn-lg" id="exploreButton">
+            Explore Recommendations
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- Trending Products Section -->
+      <div class="container trending mt-5">
+        <h2 class="text-center mb-4" style="font-weight: bold; ">🔥 Trending Products 🔥</h2>
+        <div class="row mt-5">
+          {% for index, product in trending_products.iterrows() %}
+          <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+            <div class="card">
+              <img
+                src="{{ random_product_image_urls[index] }}"
+                class="card-img-top"
+                alt="{{ product['Name'] }}"
+              />
+              <div class="card-body">
+                <h5 class="card-title">{{ truncate(product['Name'], 12) }}</h5>
+                <p class="card-text">Brand: {{ product['Brand'] }}</p>
+                <p class="card-text">Price: ${{ product['Price'] }}</p>
+                <div class="d-flex justify-content-center mt-auto">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#productModal{{ index }}"
+                  >
+                    <Details></Details>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Modal -->
+          <div
+            class="modal fade"
+            id="productModal{{ index }}"
+            tabindex="-1"
+            aria-labelledby="productModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="productModalLabel">
+                    {{ product['Name'] }}
+                  </h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <div class="row">
+                    <div class="col-md-5">
+                      <img
+                        src="{{ random_product_image_urls[index] }}"
+                        class="img-fluid"
+                        alt="{{ product['Name'] }}"
+                      />
+                    </div>
+                    <div class="col-md-7">
+                      <p><strong>Brand:</strong> {{ product['Brand'] }}</p>
+                      <p>
+                        <strong>Review Count:</strong> {{ product['ReviewCount']
+                        }}
+                      </p>
+                      <p><strong>Rating:</strong> {{ product['Rating'] }}</p>
+                      <p class="card-text" style="float: left; color: #000; font-weight: bold;">Price: ${{ product['Price'] }}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer justify-content-center">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {% endfor %}
+        </div>
+      </div>
+    </main>
+
+    <!-- Settings Modal -->
+<div class="modal fade" id="settingsModal" tabindex="-1" role="dialog" aria-labelledby="settingsModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="settingsModalLabel">Settings</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="hide">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h5>Choose Theme:</h5>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="theme" id="defaultTheme" value="default" checked>
+          <label class="form-check-label" for="defaultTheme">
+            Default
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="theme" id="blackTheme" value="black">
+          <label class="form-check-label" for="blackTheme">
+            Black Theme
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="theme" id="greenTheme" value="green">
+          <label class="form-check-label" for="greenTheme">
+            Green Theme
+          </label>
+        </div>
+        <hr>
+        <h5>Zoom:</h5>
+        <button type="button" class="btn btn-primary mr-2" id="zoomIn">Zoom In</button>
+        <button type="button" class="btn btn-primary" id="zoomOut">Zoom Out</button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="hide">Close</button>
+        <button type="button" class="btn btn-primary" id="applyTheme">Apply</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+  // Handle click on Settings link to open the modal
+  document.getElementById('settingsLink').addEventListener('click', function() {
+    $('#settingsModal').modal('show');
+  });
+
+  // Handle theme apply button click
+  document.getElementById('applyTheme').addEventListener('click', function() {
+    // Get the selected theme value
+    var selectedTheme = document.querySelector('input[name="theme"]:checked').value;
+
+    // Apply the selected theme
+    if (selectedTheme === 'black') {
+      document.body.style.backgroundColor = 'black';
+      document.body.style.color = 'white';
+    } else if (selectedTheme === 'green') {
+      document.body.style.backgroundColor = 'green';
+      document.body.style.color = 'white';
+    } else {
+      // Default theme
+      document.body.style.backgroundColor = '#f8f9fa';
+      document.body.style.color = 'black';
+    }
+
+    // Close the modal
+    $('#settingsModal').modal('hide');
+   
+  });
+
+  // close the model while click close
+  document.getElementById('hide').addEventListener('click', function() {
+    $('#settingsModal').modal('hide');
+  })
+
+  // Handle zoom in button click
+  document.getElementById('zoomIn').addEventListener('click', function() {
+    document.body.style.zoom = "115%";
+  });
+
+  // Handle zoom out button click
+  document.getElementById('zoomOut').addEventListener('click', function() {
+    document.body.style.zoom = "100%";
+  });
+</script>
+
+    <!--footer-->
+    <footer class="bg-dark text-white text-center py-3">
+      <div class="container">
+        <p>&copy; 2024 ShopWise. All Rights Reserved.</p>
+      </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

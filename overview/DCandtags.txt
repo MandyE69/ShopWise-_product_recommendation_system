@@ -1,0 +1,98 @@
+"Data Cleaning and Tags Creation Overview"
+
+Objective:
+
+Data Cleaning: Prepare raw textual data by removing unnecessary noise, such as stop words, punctuation, and special characters.
+
+Tags Creation: Extract relevant keywords or tags from cleaned data for categorization or recommendation.
+
+Steps for Data Cleaning and Tags Creation
+    1. Data Cleaning
+        Convert to Lowercase: Standardizes text for case-insensitive matching.
+        Remove Punctuation and Special Characters: Removes unnecessary symbols that don't add value to the analysis.
+        Remove Stop Words: Eliminates common words (like and, the, of) that don't contribute to meaning.
+        Lemmatization: Reduces words to their base form (e.g., running → run).
+    Example Code:
+
+            import spacy
+            from spacy.lang.en.stop_words import STOP_WORDS
+
+            # Load the English NLP model
+            nlp = spacy.load("en_core_web_sm")
+
+            def clean_text(text):
+            # Convert to lowercase
+            text = text.lower()
+            # Process text with spaCy
+            doc = nlp(text)
+            # Remove stop words, punctuation, and lemmatize
+            cleaned_tokens = [
+                token.lemma_ for token in doc
+                if not token.is_stop and not token.is_punct and not token.is_space
+            ]
+            # Join tokens back to string
+            return " ".join(cleaned_tokens)
+
+    # Example usage
+        example_text = "This is a sample product description! It includes various features."
+        cleaned_text = clean_text(example_text)
+        print("Cleaned Text:", cleaned_text)
+
+    2. Tags Creation
+        Purpose: Extract key terms from cleaned text for:
+                    Metadata (e.g., for product descriptions).
+                    Recommendations.
+                    Search engine optimization (SEO).
+        Approach:
+            Use spaCy's noun chunks and named entity recognition (NER).
+            Identify key phrases, entities, and relevant keywords.
+
+    Example Code:
+
+        def extract_tags(text, max_tags=5):
+            # Process text with spaCy
+            doc = nlp(text)
+            # Extract noun chunks and named entities
+            tags = set()
+            for chunk in doc.noun_chunks:
+                tags.add(chunk.lemma_)
+            for entity in doc.ents:
+                tags.add(entity.text)
+            # Return top tags (limit to max_tags)
+            return list(tags)[:max_tags]
+
+    # Example usage
+        tags = extract_tags(cleaned_text)
+        print("Tags:", tags)
+    
+    Putting It All Together
+        
+    Clean and Extract Tags Function:
+
+            def clean_and_extract_tags(text, max_tags=5):
+                # Clean the text
+                cleaned_text = clean_text(text)
+                # Extract tags from cleaned text
+                tags = extract_tags(cleaned_text, max_tags=max_tags)
+                return tags
+
+    # Example usage
+        example_description = "This latest smartphone features a powerful Snapdragon processor and 120Hz display."
+        tags = clean_and_extract_tags(example_description)
+        print("Generated Tags:", tags)
+
+        Output Example
+            Input:
+            plaintext
+                "This latest smartphone features a powerful Snapdragon processor and 120Hz display."
+            Output:
+            plaintext
+                Cleaned Text: "latest smartphone feature powerful snapdragon processor 120hz display"
+            
+             Tags: ['smartphone', 'snapdragon processor', '120hz display']
+
+
+Applications
+    Product Tagging: Automatically generate tags for e-commerce products.
+    SEO Optimization: Use tags to enhance searchability.
+    Recommendations: Create metadata for content-based filtering in recommendation systems.
