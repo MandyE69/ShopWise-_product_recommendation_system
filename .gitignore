@@ -11,4 +11,4 @@ myenv/
 .DS_Store
 Thumbs.db
 .vercel.json
-.recommender_system.ipynb
+rec
