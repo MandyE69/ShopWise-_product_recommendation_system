@@ -10,5 +10,5 @@ myenv/
 # OS-specific files
 .DS_Store
 Thumbs.db
-.vercel
-.recommender_system
+.vercel.json
+.recommender_system.ipynb
