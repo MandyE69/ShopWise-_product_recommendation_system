@@ -233,11 +233,8 @@
           {% for index, product in trending_products.iterrows() %}
           <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
             <div class="card">
-              <img
-                src="{{ random_product_image_urls[index] }}"
-                class="card-img-top"
-                alt="{{ product['Name'] }}"
-              />
+              <img src="{{ random_product_image_urls[index] if random_product_image_urls is defined else '' }}"
+              class="card-img-top" alt="{{ product['Name'] }}" />
               <div class="card-body">
                 <h5 class="card-title">{{ truncate(product['Name'], 12) }}</h5>
                 <p class="card-text">Brand: {{ product['Brand'] }}</p>

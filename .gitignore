@@ -1,10 +1,6 @@
 # Ignore the virtual environment
 myenv/
 
-# Byte-compiled / cached files
-__pycache__/
-*.py[cod]
-
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/
 
@@ -14,3 +10,5 @@ __pycache__/
 # OS-specific files
 .DS_Store
 Thumbs.db
+.vercel
+.recommeder_system

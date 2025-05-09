@@ -1,3 +1,4 @@
+import streamlit as st
 from flask import Flask, request, render_template
 import pandas as pd
 import random
@@ -69,7 +70,7 @@ def index():
     # price = [40, 50, 60, 70, 100, 122, 106, 50, 30, 50]
     price = list(train_data['Price'].values)
     return render_template('index.html',trending_products=trending_products.head(8),truncate = truncate,
-                           gitproduct_image_urls=product_image_urls,
+                           random_product_image_urls=product_image_urls,
                            price = price
     )
 
@@ -165,3 +166,6 @@ def recommendations():
 
 if __name__=='__main__':
     app.run(debug=True)
+# if __name__ == "__main__":
+#     from waitress import serve
+#     serve(app, host="0.0.0.0", port=8080)
